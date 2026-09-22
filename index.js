@@ -1,6 +1,7 @@
 import express from "express";
 
 const app = express()
+app.use(express.json());
 
 
 // Array:
@@ -39,6 +40,24 @@ app.delete("/products/:id", (req,res)=>{
     products=products.filter((product)=> product.id!==parseInt(id));
     res.status(204).send();
 })
+
+//UPDATE API:
+app.put("/products/:id", (req, res) => {
+    const { id } = req.params;
+    const productId = parseInt(id);
+
+    const productExists = products.some((product) => product.id === productId);
+    if (!productExists) {
+        return res.status(404).json({ message: "Product not found" });
+    }
+
+    products = products.map((product) =>
+        product.id === productId ? { ...product, ...req.body } : product
+    );
+
+    const updatedProduct = products.find((product) => product.id === productId);
+    res.status(200).json(updatedProduct);
+});
 
 
 const PORT=5000
