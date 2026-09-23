@@ -41,7 +41,7 @@ app.delete("/products/:id", (req,res)=>{
     res.status(204).send();
 })
 
-//UPDATE API:
+//UPDATE/ PUT API:
 app.put("/products/:id", (req, res) => {
     const { id } = req.params;
     const productId = parseInt(id);
