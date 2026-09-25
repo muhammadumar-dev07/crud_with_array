@@ -1,14 +1,35 @@
 import express from "express";
 import cors from "cors";
+import mongoose from "mongoose";
+import dotenv from "dotenv";
 
+
+dotenv.config();
 const app = express();
 app.use(express.json());
+
+// Changing DNS due to multiple devices on the same wif network:
+import dns from "node:dns/promises";
+dns.setServers(["1.1.1.1","8.8.8.8"]);
+
+// Giving access to the frontend address using cors policy:
 app.use(
   cors({
     origin: ["http://localhost:5173"],
     methods: ["GET", "POST", "PUT", "DELETE"],
   }),
 );
+
+// Function for Database Connection: 
+async function ConnectDB() {
+  try {
+    await mongoose.connect(process.env.MONGODB_URI);
+    console.log("MongoDB Connected")
+  } catch (error) {
+    console.log(error)
+  }
+};
+ConnectDB();
 
 // Array:
 let products = [
